@@ -5,8 +5,9 @@ import { useDocumentStore } from "./useDocument";
 
 export function useExport() {
 	const { value, title } = useDocumentStore();
+	
 	const exportPDF = async (element: HTMLElement) => {
-		await exportAsPDF(element, title || "document");
+		await exportAsPDF(element, title || "document", value as any[]);
 	};
 	const exportDOCX = async () => {
 		const html = buildHtmlFromSlate(value as any);

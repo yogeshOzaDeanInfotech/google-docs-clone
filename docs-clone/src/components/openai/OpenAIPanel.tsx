@@ -18,6 +18,23 @@ export default function OpenAIPanel() {
 		setInput("");
 	};
 
+	const handleInsert = (text: string) => {
+		const current = doc.value as any[];
+		
+		// Split text by line breaks and create paragraphs
+		const lines = text.split('\n').filter(line => line.trim() !== '');
+		
+		const newParagraphs = lines.map(line => ({
+			type: "paragraph",
+			children: [{ text: line.trim() }]
+		}));
+		
+		const updatedValue = [...current, ...newParagraphs];
+		
+		// Set the new value
+		doc.setValue(updatedValue);
+	};
+
 	return (
 		<div className={`border-l bg-white w-[360px] flex flex-col transition-all ${open ? "" : "-mr-[320px]"}`}>
 			<div className="h-12 border-b flex items-center justify-between px-3">
@@ -35,11 +52,7 @@ export default function OpenAIPanel() {
 								<button className="text-xs px-2 py-1 rounded bg-gray-200" onClick={() => navigator.clipboard.writeText(m.text)}>
 									<Copy className="inline mr-1" size={12}/> Copy
 								</button>
-								<button className="text-xs px-2 py-1 rounded bg-blue-600 text-white" onClick={() => {
-									const current = doc.value as any[];
-									const para = { type: "paragraph", children: [{ text: m.text }] } as any;
-									doc.setValue([...current, para]);
-								}}>
+								<button className="text-xs px-2 py-1 rounded bg-blue-600 text-white" onClick={() => handleInsert(m.text)}>
 									<FilePlus className="inline mr-1" size={12}/> Insert
 								</button>
 							</div>

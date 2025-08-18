@@ -29,3 +29,32 @@ body {
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 8px; }
 *::-webkit-scrollbar-track { background: transparent; }
+
+/* Print styles for A4 page breaks */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  #doc-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 20mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+    page-break-after: always;
+  }
+  
+  /* Ensure proper page breaks */
+  p, h1, h2, h3, h4, h5, h6 {
+    page-break-inside: avoid;
+  }
+  
+  /* Force page breaks at specific elements if needed */
+  .page-break {
+    page-break-before: always;
+  }
+}

@@ -20,7 +20,7 @@ const notoDevanagari = Noto_Sans_Devanagari({
 
 export const metadata: Metadata = {
 	title: "Docs Clone",
-	description: "Google Docs-like editor with Gemini",
+	description: "Google Docs-like editor with AI Assistant",
 };
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {

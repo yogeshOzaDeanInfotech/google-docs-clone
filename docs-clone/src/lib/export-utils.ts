@@ -1,26 +1,60 @@
 import { serializeToHTML, serializeToPlainText } from "./document-utils";
 
-export async function exportAsPDF(rootElement: HTMLElement, filename: string) {
-	const { jsPDF } = await import("jspdf");
-	const html2canvas = (await import("html2canvas")).default;
-	const canvas = await html2canvas(rootElement, { scale: 2, useCORS: true });
-	const imgData = canvas.toDataURL("image/png");
-	const pdf = new jsPDF({ unit: "pt", format: "a4" });
-	const pageWidth = pdf.internal.pageSize.getWidth();
-	const pageHeight = pdf.internal.pageSize.getHeight();
-	const imgWidth = pageWidth;
-	const imgHeight = (canvas.height * imgWidth) / canvas.width;
-	let heightLeft = imgHeight;
-	let position = 0;
-	pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-	heightLeft -= pageHeight;
-	while (heightLeft > 0) {
-		position = heightLeft - imgHeight;
-		pdf.addPage();
-		pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-		heightLeft -= pageHeight;
+export async function exportAsPDF(rootElement: HTMLElement, filename: string, documentValue?: any[]) {
+	try {
+
+		let content: any[];
+		
+		if (documentValue && documentValue.length > 0) {
+			// Use the Slate content directly
+			content = documentValue;
+		} else {
+			// Fallback to DOM content if no document value provided
+			const htmlContent = rootElement.innerHTML;
+			content = [{ type: "paragraph", children: [{ text: htmlContent.replace(/<[^>]+>/g, "") }] }];
+		}
+		
+		// Check if we have any content
+		if (!content || content.length === 0) {
+			throw new Error("No content available for PDF export");
+		}
+
+		// Convert content to HTML for server processing
+		const htmlContent = serializeToHTML(content);
+
+		// Call server-side API to generate PDF
+		const response = await fetch('/api/generate-pdf', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				html: htmlContent,
+				filename: filename
+			})
+		});
+
+		if (!response.ok) {
+			throw new Error(`PDF generation failed: ${response.statusText}`);
+		}
+
+		// Get the PDF blob
+		const blob = await response.blob();
+		
+		// Save the PDF
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = `${filename}.pdf`;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
+		
+	} catch (error) {
+		console.error("PDF Export Error:", error);
+		throw error;
 	}
-	pdf.save(`${filename}.pdf`);
 }
 
 export async function exportAsDocx(html: string, filename: string) {

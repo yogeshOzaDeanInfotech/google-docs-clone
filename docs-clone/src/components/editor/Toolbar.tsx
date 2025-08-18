@@ -2,7 +2,7 @@
 
 import { Editor } from "slate";
 import { useSlate } from "slate-react";
-import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, List, ListOrdered, Link as LinkIcon, Image as ImageIcon, Table, Undo2, Redo2, Type } from "lucide-react";
+import { Bold, Italic, Underline, List, ListOrdered, Link as LinkIcon, Image as ImageIcon, Table, Undo2, Redo2 } from "lucide-react";
 import { toggleMark, toggleBlock } from "@/lib/document-utils";
 
 export default function Toolbar({ onUndo, onRedo }: { onUndo: () => void; onRedo: () => void }) {
