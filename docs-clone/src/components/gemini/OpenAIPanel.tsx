@@ -2,12 +2,12 @@
 
 import { useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, Send, Copy, FilePlus } from "lucide-react";
-import { useGemini } from "@/hooks/useGemini";
+import { useOpenAI } from "@/hooks/useOpenAI";
 import { useDocumentStore } from "@/hooks/useDocument";
 
-export default function GeminiPanel() {
+export default function OpenAIPanel() {
 	const [open, setOpen] = useState(true);
-	const { messages, loading, ask } = useGemini();
+	const { messages, loading, ask } = useOpenAI();
 	const [input, setInput] = useState("");
 	const areaRef = useRef<HTMLDivElement>(null);
 	const doc = useDocumentStore();
@@ -21,7 +21,7 @@ export default function GeminiPanel() {
 	return (
 		<div className={`border-l bg-white w-[360px] flex flex-col transition-all ${open ? "" : "-mr-[320px]"}`}>
 			<div className="h-12 border-b flex items-center justify-between px-3">
-				<div className="font-medium">Gemini</div>
+				<div className="font-medium">OpenAI</div>
 				<button onClick={() => setOpen(o => !o)} className="p-1 rounded hover:bg-gray-100">
 					{open ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
 				</button>
@@ -46,7 +46,7 @@ export default function GeminiPanel() {
 						)}
 					</div>
 				))}
-				{loading && <div className="text-xs text-gray-500">Gemini is typing…</div>}
+				{loading && <div className="text-xs text-gray-500">OpenAI is typing…</div>}
 			</div>
 			<div className="p-2 border-t flex items-center gap-2">
 				<textarea value={input} onChange={(e) => setInput(e.target.value)} rows={2} className="flex-1 resize-none border rounded p-2 text-sm" placeholder="Enter a prompt here"/>

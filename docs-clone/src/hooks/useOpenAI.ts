@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import type { ChatMessage } from "@/types/gemini";
+import type { ChatMessage } from "@/types/openai";
 import { uid } from "@/lib/utils";
-import { tryGenerateContent } from "@/lib/gemini";
+import { tryGenerateContent } from "@/lib/openai";
 import { serializeToPlainText } from "@/lib/document-utils";
 import { useDocumentStore } from "./useDocument";
 
-export function useGemini() {
+export function useOpenAI() {
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);

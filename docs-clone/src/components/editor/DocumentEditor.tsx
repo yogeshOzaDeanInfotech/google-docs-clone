@@ -2,7 +2,7 @@
 
 import Header from "@/components/layout/Header";
 import DocumentCanvas from "./DocumentCanvas";
-import GeminiPanel from "@/components/gemini/GeminiPanel";
+import OpenAIPanel from "@/components/openai/OpenAIPanel";
 import StatusBar from "@/components/layout/StatusBar";
 
 export default function DocumentEditor() {
@@ -16,7 +16,7 @@ export default function DocumentEditor() {
 					</div>
 					<StatusBar />
 				</div>
-				<GeminiPanel />
+				<OpenAIPanel />
 			</div>
 		</div>
 	);
