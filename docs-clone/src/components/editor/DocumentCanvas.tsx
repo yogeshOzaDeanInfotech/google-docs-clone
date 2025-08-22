@@ -41,19 +41,21 @@ function normalizeSlateValue(value: any): Descendant[] {
 	try {
 		// If value is undefined, null, or not an array, return default
 		if (!value || !Array.isArray(value)) {
-			console.warn('Value is not an array, using default');
+			console.warn("Value is not an array, using default");
 			return DEFAULT_VALUE;
 		}
 
 		// Ensure each element has required properties
 		const normalized = value.map((element: any, index: number) => {
-			if (!element || typeof element !== 'object') {
-				console.warn(`Invalid element at index ${index}, using default paragraph`);
+			if (!element || typeof element !== "object") {
+				console.warn(
+					`Invalid element at index ${index}, using default paragraph`
+				);
 				return { type: "paragraph", children: [{ text: "" }] } as Element;
 			}
 
 			// Ensure element has type and children
-			if (!element.type || typeof element.type !== 'string') {
+			if (!element.type || typeof element.type !== "string") {
 				element.type = "paragraph";
 			}
 
@@ -62,39 +64,43 @@ function normalizeSlateValue(value: any): Descendant[] {
 			}
 
 			// Ensure each child has text property
-			element.children = element.children.map((child: any, childIndex: number) => {
-				if (!child || typeof child !== 'object') {
-					console.warn(`Invalid child at index ${childIndex}, using default text`);
-					return { text: "" };
+			element.children = element.children.map(
+				(child: any, childIndex: number) => {
+					if (!child || typeof child !== "object") {
+						console.warn(
+							`Invalid child at index ${childIndex}, using default text`
+						);
+						return { text: "" };
+					}
+					if (typeof child.text !== "string") {
+						child.text = String(child.text || "");
+					}
+					return child;
 				}
-				if (typeof child.text !== 'string') {
-					child.text = String(child.text || "");
-				}
-				return child;
-			});
+			);
 
 			return element as Element;
 		});
 
 		// Ensure we have at least one element
 		if (normalized.length === 0) {
-			console.warn('No valid elements found, using default');
+			console.warn("No valid elements found, using default");
 			return DEFAULT_VALUE;
 		}
 
 		return normalized;
 	} catch (error) {
-		console.error('Error normalizing Slate value:', error);
+		console.error("Error normalizing Slate value:", error);
 		return DEFAULT_VALUE;
 	}
 }
 
 export default function DocumentCanvas() {
 	const { value, setValue } = useDocumentStore();
-	
+
 	// Create editor with proper memoization
 	const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-	
+
 	const pageRef = useRef<HTMLDivElement>(null);
 
 	// Normalize the value to prevent undefined errors
@@ -106,28 +112,37 @@ export default function DocumentCanvas() {
 	}, [normalizedValue]);
 
 	// Handle value changes with proper validation
-	const handleValueChange = useCallback((newValue: Descendant[]) => {
-		try {
-			// Validate the new value before setting it
-			const validatedValue = normalizeSlateValue(newValue);
-			
-			// Additional safety check to ensure the value is valid
-			if (!validatedValue || !Array.isArray(validatedValue) || validatedValue.length === 0) {
-				console.warn('Invalid value detected, using fallback');
+	const handleValueChange = useCallback(
+		(newValue: Descendant[]) => {
+			try {
+				// Validate the new value before setting it
+				const validatedValue = normalizeSlateValue(newValue);
+
+				// Additional safety check to ensure the value is valid
+				if (
+					!validatedValue ||
+					!Array.isArray(validatedValue) ||
+					validatedValue.length === 0
+				) {
+					console.warn("Invalid value detected, using fallback");
+					setValue(DEFAULT_VALUE);
+					return;
+				}
+
+				// Only update if the value has actually changed to prevent unnecessary re-renders
+				if (
+					JSON.stringify(validatedValue) !== JSON.stringify(normalizedValue)
+				) {
+					setValue(validatedValue);
+				}
+			} catch (error) {
+				console.error("Error updating document value:", error);
+				// Fallback to default value if there's an error
 				setValue(DEFAULT_VALUE);
-				return;
 			}
-			
-			// Only update if the value has actually changed to prevent unnecessary re-renders
-			if (JSON.stringify(validatedValue) !== JSON.stringify(normalizedValue)) {
-				setValue(validatedValue);
-			}
-		} catch (error) {
-			console.error('Error updating document value:', error);
-			// Fallback to default value if there's an error
-			setValue(DEFAULT_VALUE);
-		}
-	}, [setValue, normalizedValue]);
+		},
+		[setValue, normalizedValue]
+	);
 
 	// Force editor to update when external value changes
 	useEffect(() => {
@@ -137,7 +152,7 @@ export default function DocumentCanvas() {
 				editor.children = normalizedValue;
 				editor.onChange();
 			} catch (error) {
-				console.error('Error updating editor children:', error);
+				console.error("Error updating editor children:", error);
 				// Fallback to default value
 				editor.children = DEFAULT_VALUE;
 				editor.onChange();
@@ -157,7 +172,8 @@ export default function DocumentCanvas() {
 			if (props.element.align) style.textAlign = props.element.align;
 			if (props.element.indent)
 				style.marginLeft = `${props.element.indent * 20}px`;
-			if (props.element.lineSpacing) style.lineHeight = props.element.lineSpacing;
+			if (props.element.lineSpacing)
+				style.lineHeight = props.element.lineSpacing;
 
 			switch (props.element.type) {
 				case "heading":
@@ -258,7 +274,7 @@ export default function DocumentCanvas() {
 					);
 			}
 		} catch (error) {
-			console.error('Error rendering element:', error);
+			console.error("Error rendering element:", error);
 			return <p {...props.attributes}>Error rendering element</p>;
 		}
 	}, []);
@@ -293,7 +309,7 @@ export default function DocumentCanvas() {
 				</span>
 			);
 		} catch (error) {
-			console.error('Error rendering leaf:', error);
+			console.error("Error rendering leaf:", error);
 			return <span {...props.attributes}>Error rendering leaf</span>;
 		}
 	}, []);
@@ -307,7 +323,7 @@ export default function DocumentCanvas() {
 					<div className="mx-auto">
 						<div className="bg-white shadow-sm border mx-auto p-8 text-center">
 							<p className="text-red-500">Error: Invalid document structure</p>
-							<button 
+							<button
 								onClick={() => setValue(DEFAULT_VALUE)}
 								className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
 							>
