@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 import type { DocumentValue, DocumentVersion } from "@/types/document";
 import { INITIAL_SLATE_VALUE } from "@/constants/templates";
 import { uid } from "@/lib/utils";
+import React from "react";
 
 export type DocumentState = {
 	title: string;
@@ -36,16 +37,32 @@ export const useDocumentStore = create<DocumentState>()(
 				set({ versions: [ver, ...versions].slice(0, 20) });
 			},
 		}),
-		{ name: "docs-clone-state" }
+		{ 
+			name: "docs-clone-state",
+			// Add partial hydration to prevent hydration mismatches
+			partialize: (state) => ({
+				title: state.title,
+				value: state.value,
+				versions: state.versions,
+			}),
+		}
 	)
 );
 
-// Auto-commit every 30s
-let intervalHandle: any;
-if (typeof window !== "undefined") {
-	clearInterval(intervalHandle);
-	intervalHandle = setInterval(() => {
-		const { commitVersion } = useDocumentStore.getState();
-		commitVersion();
-	}, 30000);
-}
+// Hook to handle auto-commit functionality
+export const useAutoCommit = () => {
+	React.useEffect(() => {
+		// Only run on client side
+		if (typeof window === "undefined") return;
+
+		const intervalHandle = setInterval(() => {
+			const { commitVersion } = useDocumentStore.getState();
+			commitVersion();
+		}, 30000);
+
+		// Cleanup interval on unmount
+		return () => {
+			clearInterval(intervalHandle);
+		};
+	}, []);
+};

@@ -4,8 +4,12 @@ import Header from "@/components/layout/Header";
 import DocumentCanvas from "./DocumentCanvas";
 import OpenAIPanel from "@/components/openai/OpenAIPanel";
 import StatusBar from "@/components/layout/StatusBar";
+import { useAutoCommit } from "@/hooks/useDocument";
 
 export default function DocumentEditor() {
+	// Initialize auto-commit functionality
+	useAutoCommit();
+
 	return (
 		<div className="flex flex-col h-full">
 			<Header />
