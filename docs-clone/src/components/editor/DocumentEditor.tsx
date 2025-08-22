@@ -2,9 +2,12 @@
 
 import Header from "@/components/layout/Header";
 import DocumentCanvas from "./DocumentCanvas";
-import OpenAIPanel from "@/components/openai/OpenAIPanel";
+import dynamic from "next/dynamic";
 import StatusBar from "@/components/layout/StatusBar";
 import { useAutoCommit } from "@/hooks/useDocument";
+const OpenAIPanel = dynamic(() => import("@/components/openai/OpenAIPanel"), {
+	ssr: false,
+});
 
 export default function DocumentEditor() {
 	// Initialize auto-commit functionality

@@ -46,7 +46,7 @@ function normalizeSlateValue(value: any): Descendant[] {
 
 		// Ensure each element has required properties
 		const normalized = value.map((element: any) => {
-			if (!element || typeof element !== 'object') {
+			if (!element || typeof element !== "object") {
 				return { type: "paragraph", children: [{ text: "" }] } as Element;
 			}
 
@@ -61,10 +61,10 @@ function normalizeSlateValue(value: any): Descendant[] {
 
 			// Ensure each child has text property
 			element.children = element.children.map((child: any) => {
-				if (!child || typeof child !== 'object') {
+				if (!child || typeof child !== "object") {
 					return { text: "" };
 				}
-				if (typeof child.text !== 'string') {
+				if (typeof child.text !== "string") {
 					child.text = "";
 				}
 				return child;
@@ -80,17 +80,17 @@ function normalizeSlateValue(value: any): Descendant[] {
 
 		return normalized;
 	} catch (error) {
-		console.error('Error normalizing Slate value:', error);
+		console.error("Error normalizing Slate value:", error);
 		return DEFAULT_VALUE;
 	}
 }
 
 export default function DocumentCanvas() {
 	const { value, setValue } = useDocumentStore();
-	
+
 	// Create editor with proper memoization
 	const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-	
+
 	const pageRef = useRef<HTMLDivElement>(null);
 
 	// Normalize the value to prevent undefined errors
@@ -102,17 +102,20 @@ export default function DocumentCanvas() {
 	}, [normalizedValue]);
 
 	// Handle value changes with proper validation
-	const handleValueChange = useCallback((newValue: Descendant[]) => {
-		try {
-			// Validate the new value before setting it
-			const validatedValue = normalizeSlateValue(newValue);
-			setValue(validatedValue);
-		} catch (error) {
-			console.error('Error updating document value:', error);
-			// Fallback to current value if there's an error
-			setValue(normalizedValue);
-		}
-	}, [setValue, normalizedValue]);
+	const handleValueChange = useCallback(
+		(newValue: Descendant[]) => {
+			try {
+				// Validate the new value before setting it
+				const validatedValue = normalizeSlateValue(newValue);
+				setValue(validatedValue);
+			} catch (error) {
+				console.error("Error updating document value:", error);
+				// Fallback to current value if there's an error
+				setValue(normalizedValue);
+			}
+		},
+		[setValue, normalizedValue]
+	);
 
 	// Force editor to update when external value changes
 	useEffect(() => {
@@ -135,7 +138,8 @@ export default function DocumentCanvas() {
 			if (props.element.align) style.textAlign = props.element.align;
 			if (props.element.indent)
 				style.marginLeft = `${props.element.indent * 20}px`;
-			if (props.element.lineSpacing) style.lineHeight = props.element.lineSpacing;
+			if (props.element.lineSpacing)
+				style.lineHeight = props.element.lineSpacing;
 
 			switch (props.element.type) {
 				case "heading":
@@ -236,7 +240,7 @@ export default function DocumentCanvas() {
 					);
 			}
 		} catch (error) {
-			console.error('Error rendering element:', error);
+			console.error("Error rendering element:", error);
 			return <p {...props.attributes}>Error rendering element</p>;
 		}
 	}, []);
@@ -271,7 +275,7 @@ export default function DocumentCanvas() {
 				</span>
 			);
 		} catch (error) {
-			console.error('Error rendering leaf:', error);
+			console.error("Error rendering leaf:", error);
 			return <span {...props.attributes}>Error rendering leaf</span>;
 		}
 	}, []);
@@ -285,7 +289,7 @@ export default function DocumentCanvas() {
 					<div className="mx-auto">
 						<div className="bg-white shadow-sm border mx-auto p-8 text-center">
 							<p className="text-red-500">Error: Invalid document structure</p>
-							<button 
+							<button
 								onClick={() => setValue(DEFAULT_VALUE)}
 								className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
 							>
@@ -305,7 +309,7 @@ export default function DocumentCanvas() {
 				key={slateKey}
 				editor={editor}
 				initialValue={normalizedValue}
-				onValueChange={handleValueChange}
+				onChange={handleValueChange}
 			>
 				<Toolbar onUndo={() => editor.undo()} onRedo={() => editor.redo()} />
 				<div className="flex-1 overflow-auto bg-[#f8f9fa] py-6">

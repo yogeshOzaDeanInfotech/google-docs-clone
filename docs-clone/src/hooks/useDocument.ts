@@ -37,10 +37,10 @@ export const useDocumentStore = create<DocumentState>()(
 				set({ versions: [ver, ...versions].slice(0, 20) });
 			},
 		}),
-		{ 
+		{
 			name: "docs-clone-state",
 			// Add partial hydration to prevent hydration mismatches
-			partialize: (state) => ({
+			partialize: state => ({
 				title: state.title,
 				value: state.value,
 				versions: state.versions,

@@ -7,14 +7,33 @@ export const INITIAL_SLATE_VALUE = [
 			{ text: "कार्यालयाचे नाव: महाराष्ट्र शासन, माहिती अधिकार विभाग" },
 		],
 	} as Element,
-	{ type: "paragraph", children: [{ text: "पत्ता: पुणे, महाराष्ट्र" }] } as Element,
-	{ type: "paragraph", children: [{ text: "दूरध्वनी क्रमांक: ०२०-२३३४५६७८" }] } as Element,
-	{ type: "paragraph", children: [{ text: "ई-मेल: rti.maharashtra@gov.in" }] } as Element,
+	{
+		type: "paragraph",
+		children: [{ text: "पत्ता: पुणे, महाराष्ट्र" }],
+	} as Element,
+	{
+		type: "paragraph",
+		children: [{ text: "दूरध्वनी क्रमांक: ०२०-२३३४५६७८" }],
+	} as Element,
+	{
+		type: "paragraph",
+		children: [{ text: "ई-मेल: rti.maharashtra@gov.in" }],
+	} as Element,
 	{ type: "paragraph", children: [{ text: "" }] } as Element,
-	{ type: "paragraph", children: [{ text: "जावक क्र.: RTI/2025/123" }] } as Element,
-	{ type: "paragraph", children: [{ text: "दिनांक: १८ ऑगस्ट २०२५" }] } as Element,
+	{
+		type: "paragraph",
+		children: [{ text: "जावक क्र.: RTI/2025/123" }],
+	} as Element,
+	{
+		type: "paragraph",
+		children: [{ text: "दिनांक: १८ ऑगस्ट २०२५" }],
+	} as Element,
 	{ type: "paragraph", children: [{ text: "" }] } as Element,
-	{ type: "heading", level: 2, children: [{ text: "कार्यकारी अधेश" }] } as Element,
+	{
+		type: "heading",
+		level: 2,
+		children: [{ text: "कार्यकारी अधेश" }],
+	} as Element,
 	{ type: "paragraph", children: [{ text: "" }] } as Element,
 	{
 		type: "paragraph",
