@@ -23,10 +23,14 @@ export const metadata: Metadata = {
 	description: "Google Docs-like editor with AI Assistant",
 };
 
-export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
+export default function RootLayout({
+	children,
+}: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html lang="en">
-			<body className={`${geistSans.variable} ${geistMono.variable} ${notoDevanagari.variable} antialiased bg-[#f1f3f4]`}>
+			<body
+				className={`${geistSans.variable} ${geistMono.variable} ${notoDevanagari.variable} antialiased bg-[#f1f3f4]`}
+			>
 				{children}
 			</body>
 		</html>

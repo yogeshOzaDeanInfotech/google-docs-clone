@@ -1,11 +1,18 @@
 "use client";
 
-import { exportAsDocx, exportAsHTML, exportAsPDF, exportAsTxt, buildHtmlFromSlate, buildTextFromSlate } from "@/lib/export-utils";
+import {
+	exportAsDocx,
+	exportAsHTML,
+	exportAsPDF,
+	exportAsTxt,
+	buildHtmlFromSlate,
+	buildTextFromSlate,
+} from "@/lib/export-utils";
 import { useDocumentStore } from "./useDocument";
 
 export function useExport() {
 	const { value, title } = useDocumentStore();
-	
+
 	const exportPDF = async (element: HTMLElement) => {
 		await exportAsPDF(element, title || "document", value as any[]);
 	};

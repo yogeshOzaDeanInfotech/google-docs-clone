@@ -23,11 +23,16 @@ export const useDocumentStore = create<DocumentState>()(
 			value: INITIAL_SLATE_VALUE,
 			versions: [],
 			isSaving: false,
-			setTitle: (t) => set({ title: t }),
-			setValue: (v) => set({ value: v }),
+			setTitle: t => set({ title: t }),
+			setValue: v => set({ value: v }),
 			commitVersion: () => {
 				const { title, value, versions } = get();
-				const ver: DocumentVersion = { id: uid("ver"), timestamp: Date.now(), title, value };
+				const ver: DocumentVersion = {
+					id: uid("ver"),
+					timestamp: Date.now(),
+					title,
+					value,
+				};
 				set({ versions: [ver, ...versions].slice(0, 20) });
 			},
 		}),

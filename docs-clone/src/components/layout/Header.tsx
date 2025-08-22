@@ -12,8 +12,10 @@ export default function Header() {
 				<Star size={20} className="text-gray-500" />
 				<input
 					value={title}
-					onChange={(e) => setTitle(e.target.value)}
-					className={cn("text-sm font-medium outline-none px-2 py-1 rounded hover:bg-gray-50 focus:bg-gray-50")}
+					onChange={e => setTitle(e.target.value)}
+					className={cn(
+						"text-sm font-medium outline-none px-2 py-1 rounded hover:bg-gray-50 focus:bg-gray-50"
+					)}
 				/>
 				<Folder size={18} className="text-gray-500" />
 			</div>
@@ -22,7 +24,11 @@ export default function Header() {
 					<Share2 size={16} /> Share
 				</button>
 				<div className="size-8 rounded-full bg-gray-200 flex items-center justify-center">
-					{isSaving ? <Loader2 size={16} className="animate-spin" /> : <User size={16} />}
+					{isSaving ? (
+						<Loader2 size={16} className="animate-spin" />
+					) : (
+						<User size={16} />
+					)}
 				</div>
 			</div>
 		</div>

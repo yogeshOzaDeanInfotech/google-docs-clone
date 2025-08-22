@@ -12,7 +12,7 @@ export default function ExportDialog() {
 		try {
 			setIsExporting(true);
 			setError(null);
-			
+
 			const pageElement = document.getElementById("doc-page") as HTMLElement;
 			if (!pageElement) {
 				throw new Error("Document page element not found");
@@ -69,40 +69,36 @@ export default function ExportDialog() {
 	return (
 		<div className="flex flex-col gap-2">
 			<div className="flex items-center gap-2">
-				<button 
-					className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50" 
+				<button
+					className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
 					onClick={handlePDFExport}
 					disabled={isExporting}
 				>
 					{isExporting ? "Exporting..." : "Export PDF"}
 				</button>
-				<button 
-					className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50" 
+				<button
+					className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
 					onClick={handleDOCXExport}
 					disabled={isExporting}
 				>
 					{isExporting ? "Exporting..." : "Export DOCX"}
 				</button>
-				<button 
-					className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50" 
+				<button
+					className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
 					onClick={handleTXTExport}
 					disabled={isExporting}
 				>
 					{isExporting ? "Exporting..." : "Export TXT"}
 				</button>
-				<button 
-					className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50" 
+				<button
+					className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
 					onClick={handleHTMLExport}
 					disabled={isExporting}
 				>
 					{isExporting ? "Exporting..." : "Export HTML"}
 				</button>
 			</div>
-			{error && (
-				<div className="text-red-500 text-xs">
-					Error: {error}
-				</div>
-			)}
+			{error && <div className="text-red-500 text-xs">Error: {error}</div>}
 		</div>
 	);
 }
