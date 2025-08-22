@@ -1,7 +1,7 @@
 "use client";
 
 import { useExport } from "@/hooks/useExport";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 export default function ExportDialog() {
 	const { exportPDF, exportDOCX, exportTXT, exportHTML } = useExport();

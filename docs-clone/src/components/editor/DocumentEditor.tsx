@@ -2,7 +2,7 @@
 
 import Header from "@/components/layout/Header";
 import DocumentCanvas from "./DocumentCanvas";
-import OpenAIPanel from "@/components/openai/OpenAIPanel";
+import AIPanel from "@/components/ai/AIPanel";
 import StatusBar from "@/components/layout/StatusBar";
 import { useAutoCommit } from "@/hooks/useDocument";
 
@@ -20,7 +20,7 @@ export default function DocumentEditor() {
 					</div>
 					<StatusBar />
 				</div>
-				<OpenAIPanel />
+				<AIPanel />
 			</div>
 		</div>
 	);

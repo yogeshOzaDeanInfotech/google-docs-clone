@@ -14,7 +14,7 @@ export type TextAlign = "left" | "center" | "right" | "justify";
 
 export const isMarkActive = (editor: Editor, mark: string) => {
 	const marks = Editor.marks(editor);
-	// @ts-ignore
+	// @ts-expect-error - Accessing dynamic property
 	return marks ? marks[mark] === true : false;
 };
 

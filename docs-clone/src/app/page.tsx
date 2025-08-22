@@ -1,6 +1,21 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import ExportDialog from "@/components/export/ExportDialog";
-import ClientOnly from "@/components/ClientOnly";
-import DocumentEditorWrapper from "@/components/DocumentEditorWrapper";
+import ClientOnly from "@/components/common/ClientOnly";
+
+// Dynamically import DocumentEditor to prevent hydration issues
+const DocumentEditor = dynamic(
+	() => import("@/components/editor/DocumentEditor"),
+	{
+		ssr: false,
+		loading: () => (
+			<div className="flex items-center justify-center h-full">
+				<div className="text-gray-500">Loading editor...</div>
+			</div>
+		),
+	}
+);
 
 export default function Home() {
 	return (
@@ -12,7 +27,7 @@ export default function Home() {
 				</ClientOnly>
 			</div>
 			<div className="flex-1 min-h-0">
-				<DocumentEditorWrapper />
+				<DocumentEditor />
 			</div>
 		</div>
 	);

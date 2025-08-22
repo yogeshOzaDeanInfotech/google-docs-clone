@@ -50,7 +50,7 @@ export async function tryGenerateContent(
 	try {
 		const text = await generateContent(opts);
 		return { ok: true, text };
-	} catch (err: any) {
-		return { ok: false, error: err?.message ?? "OpenAI error" };
+	} catch (err) {
+		return { ok: false, error: err instanceof Error ? err.message : "OpenAI error" };
 	}
 }

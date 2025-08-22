@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSlate } from "slate-react";
 import { Editor, Transforms, Node } from "slate";
-import { Search, Replace, X, ChevronUp, ChevronDown } from "lucide-react";
+import { X, ChevronUp, ChevronDown } from "lucide-react";
 
 interface FindReplaceDialogProps {
 	isOpen: boolean;

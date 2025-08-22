@@ -3,7 +3,7 @@
 import { Slate, Editable, withReact } from "slate-react";
 import { createEditor, Descendant, Element } from "slate";
 import { withHistory } from "slate-history";
-import { useMemo, useRef, useState, useEffect, useCallback } from "react";
+import { useMemo, useRef, useEffect, useCallback } from "react";
 import { useDocumentStore } from "@/hooks/useDocument";
 import Toolbar from "./Toolbar";
 
@@ -37,7 +37,7 @@ function Ruler() {
 }
 
 // Helper function to validate and normalize Slate value
-function normalizeSlateValue(value: any): Descendant[] {
+function normalizeSlateValue(value: unknown): Descendant[] {
 	try {
 		// If value is undefined, null, or not an array, return default
 		if (!value || !Array.isArray(value)) {
@@ -45,7 +45,7 @@ function normalizeSlateValue(value: any): Descendant[] {
 		}
 
 		// Ensure each element has required properties
-		const normalized = value.map((element: any) => {
+		const normalized = value.map((element: unknown) => {
 			if (!element || typeof element !== 'object') {
 				return { type: "paragraph", children: [{ text: "" }] } as Element;
 			}
@@ -307,7 +307,7 @@ export default function DocumentCanvas() {
 				initialValue={normalizedValue}
 				onValueChange={handleValueChange}
 			>
-				<Toolbar onUndo={() => editor.undo()} onRedo={() => editor.redo()} />
+				<Toolbar />
 				<div className="flex-1 overflow-auto bg-[#f8f9fa] py-6">
 					<div className="mx-auto">
 						{/* A4 Page Container with Visual Page Breaks */}
