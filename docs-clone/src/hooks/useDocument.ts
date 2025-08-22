@@ -25,7 +25,15 @@ export const useDocumentStore = create<DocumentState>()(
 			versions: [],
 			isSaving: false,
 			setTitle: t => set({ title: t }),
-			setValue: v => set({ value: v }),
+			setValue: v => {
+				// Validate the value before setting it
+				if (!v || !Array.isArray(v)) {
+					console.warn('Invalid value provided to setValue, using default');
+					set({ value: INITIAL_SLATE_VALUE });
+					return;
+				}
+				set({ value: v });
+			},
 			commitVersion: () => {
 				const { title, value, versions } = get();
 				const ver: DocumentVersion = {

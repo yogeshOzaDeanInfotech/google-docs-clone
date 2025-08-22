@@ -41,17 +41,19 @@ function normalizeSlateValue(value: any): Descendant[] {
 	try {
 		// If value is undefined, null, or not an array, return default
 		if (!value || !Array.isArray(value)) {
+			console.warn('Value is not an array, using default');
 			return DEFAULT_VALUE;
 		}
 
 		// Ensure each element has required properties
-		const normalized = value.map((element: any) => {
+		const normalized = value.map((element: any, index: number) => {
 			if (!element || typeof element !== 'object') {
+				console.warn(`Invalid element at index ${index}, using default paragraph`);
 				return { type: "paragraph", children: [{ text: "" }] } as Element;
 			}
 
 			// Ensure element has type and children
-			if (!element.type) {
+			if (!element.type || typeof element.type !== 'string') {
 				element.type = "paragraph";
 			}
 
@@ -60,12 +62,13 @@ function normalizeSlateValue(value: any): Descendant[] {
 			}
 
 			// Ensure each child has text property
-			element.children = element.children.map((child: any) => {
+			element.children = element.children.map((child: any, childIndex: number) => {
 				if (!child || typeof child !== 'object') {
+					console.warn(`Invalid child at index ${childIndex}, using default text`);
 					return { text: "" };
 				}
 				if (typeof child.text !== 'string') {
-					child.text = "";
+					child.text = String(child.text || "");
 				}
 				return child;
 			});
@@ -75,6 +78,7 @@ function normalizeSlateValue(value: any): Descendant[] {
 
 		// Ensure we have at least one element
 		if (normalized.length === 0) {
+			console.warn('No valid elements found, using default');
 			return DEFAULT_VALUE;
 		}
 
@@ -106,20 +110,38 @@ export default function DocumentCanvas() {
 		try {
 			// Validate the new value before setting it
 			const validatedValue = normalizeSlateValue(newValue);
-			setValue(validatedValue);
+			
+			// Additional safety check to ensure the value is valid
+			if (!validatedValue || !Array.isArray(validatedValue) || validatedValue.length === 0) {
+				console.warn('Invalid value detected, using fallback');
+				setValue(DEFAULT_VALUE);
+				return;
+			}
+			
+			// Only update if the value has actually changed to prevent unnecessary re-renders
+			if (JSON.stringify(validatedValue) !== JSON.stringify(normalizedValue)) {
+				setValue(validatedValue);
+			}
 		} catch (error) {
 			console.error('Error updating document value:', error);
-			// Fallback to current value if there's an error
-			setValue(normalizedValue);
+			// Fallback to default value if there's an error
+			setValue(DEFAULT_VALUE);
 		}
 	}, [setValue, normalizedValue]);
 
 	// Force editor to update when external value changes
 	useEffect(() => {
-		if (editor && normalizedValue) {
-			// Clear the editor and set new value
-			editor.children = normalizedValue;
-			editor.onChange();
+		if (editor && normalizedValue && Array.isArray(normalizedValue)) {
+			try {
+				// Clear the editor and set new value
+				editor.children = normalizedValue;
+				editor.onChange();
+			} catch (error) {
+				console.error('Error updating editor children:', error);
+				// Fallback to default value
+				editor.children = DEFAULT_VALUE;
+				editor.onChange();
+			}
 		}
 	}, [editor, normalizedValue]);
 
@@ -304,7 +326,7 @@ export default function DocumentCanvas() {
 			<Slate
 				key={slateKey}
 				editor={editor}
-				initialValue={normalizedValue}
+				initialValue={normalizedValue || DEFAULT_VALUE}
 				onValueChange={handleValueChange}
 			>
 				<Toolbar onUndo={() => editor.undo()} onRedo={() => editor.redo()} />
